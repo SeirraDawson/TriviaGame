@@ -1,0 +1,52 @@
+
+
+img {
+    background-image: url("./assets/images/martin.jpg");
+    background-attachment: fixed;
+    background-position: center; 
+    background-repeat: no-repeat;
+    background-size: cover;
+
+
+
+}
+
+
+.btn-primary {
+    background-color:#000;
+    color: orange
+
+}
+
+.btn-primary:hover{
+    background-color: rgb(22, 156, 233);
+    color: red;
+}
+
+
+.container{
+	margin-top: 50px;
+	text-align: center;
+	height: 100%;
+	width: 700px;
+}
+
+
+.footer {
+    font-family: 'Coming Soon', cursive, 'Times New Roman', Times, serif;
+    position: absolute;
+    font-size: 10px;
+    height: 25px;
+    clear: both;
+    text-align: center;
+    margin-top: 235px;
+    margin-left: 250px;
+}
+
+@media screen and (max-width:640px){
+	.container{
+		width: 500px;
+		margin-top: 200px;
+		size: 200%;
+    }
+}
