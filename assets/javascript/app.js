@@ -2,7 +2,8 @@
 var questions = [{
         question: "What is Tommy's job?",
         options: ["Unemployed", "Firefighter", "Pimp", "Community Center Counselor"],
-        answerIndex: 3
+        answerIndex: 3,
+        image
         // While it was a running gag that the other characters believed Tommy Strawn did not have a job,
         // there were clues throughout the series that Tommy was a counselor at a Boys & Girls Club.
 
@@ -10,63 +11,62 @@ var questions = [{
 
         question: "Which phrase did the Martin show popularize?",
         options: ["Talk to the hand", "Scary J. Blige", "Don't you know no good?", "You kill'n me smalls!"],
-        answerIndex: 0
+        answerIndex: 0,
+        image
         // "Martin" is recognized for popularizing the phrase, "Talk to the hand."
 },{
 
         question: "Which rapper did not appear on “Martin”?",
         options: ["The Notorious B.I.G", "MC Hammer", "Tupac", "Method Man"],
-        answerIndex: 3
+        answerIndex: 3,
+        image
         // A number of hip-hop artists from the '90s. However, Tupac was not one of them.
 },{
         question: "What city did “Martin” take place?",
         options: ["Atlanta", "Detroit", "Chicago", "Philadelphia"],
-        answerIndex: 1
+        answerIndex: 1,
+        image
         // While "Martin" what filmed in Los Angeles, it took place in Detroit.
 },{
         question: "Who did Martin pick on the most?",
         options: ["Gina", "Tommy", "Bruh Man", "Pam"],
-        answerIndex: 3
+        answerIndex: 3,
+        image
 },{
         question: "What floor did Bruh Man living on in the apartment complex?",
         options: ["2nd floor", "5th floor", "3rd floor", "1st floor"],
-        answerIndex: 1
+        answerIndex: 1,
+        image
 },{
         question: "Who sang at Martin and Gina’s engagement?",
         options: ["Brian McKnight", "Babyface", "Stevie Wonder", "Jodeci"],
-        answerIndex: 0
+        answerIndex: 0,
+        image
 },{
         question: "What is Gina’s father’s profession?",
         options: ["Judge", "Lawyer", "Chiropractor", "Family Physician"],
-        answerIndex: 2
+        answerIndex: 2,
+        image
 },{
         question: "Martin and Gina are rich. They have won the lottery or so they think. Martin gives gifts to all his friends. What does he give Pam?",
         options: ["A $2000 back shaving job", "A $2000 pedicure", "A $2000 plastic surgery job", "A $2000 wax job"],
-        answerIndex: 3
+        answerIndex: 3,
+        image
 },{
         question: "Martin went on a rent strike because his rent was increased and the landlord refused to fix any of the appliances around the apartment. How much was the increase?",
         options: ["10%", "5%", "$5.00", "$50.00"],
-        answerIndex: 2
+        answerIndex: 2,
+        image
 }];
-
-//After message prompt
-var messagePrompt = {
-    correct: "You right!",
-    incorrect: "You wrong Homes!",
-    timeExpired: "Time ran out!",
-    gameFinished:"How did you do."
-}
-
 
 var time = 0;
 var timer = 20;
-var second = 0;
 var currentQ = 0;
-var rightAnswer = 0;
-var wrongAnswer = 0;
-var answer = 0;
-var unanswered = 0;
-var userSelect= 0;
+var rightAnswers;
+var wrongAnswers;
+var unanswered;
+var userGuess;
+var currentCorrectAnswer;
 
 
 $(document).ready(function() {
@@ -87,8 +87,9 @@ $(document).ready(function() {
     // ----------- Game Functions ------------
     function newGame(){
         currentQ = 0;
-        correctAnswer = 0;
-        wrongAnswer = 0;
+        // Scoreboard
+        rightAnswers = 0;
+        wrongAnswers = 0;
         unanswered = 0;
         $("#finalMessage").empty();
         $("#rightAnswers").empty();
@@ -97,41 +98,15 @@ $(document).ready(function() {
         loadQuestion();
     }
 
-    function loadQuestion (){
-        $("#message").empty();
-        $("#correctAnswer").empty();
-        $("#media").empty();
-        answer = true;
-
-        // displays which question out of 10 you are on
-        $("#currentQ").html("Question " + (currentQ+1) + ' of ' + questions.length);
-        // displays the current question
-        $(".question").html("<h2> " + questions[currentQ].question + "</h2>");
-        for(var i = 0; i < 4; i++){
-            var multipleChoices = $("<div>");
-            multipleChoices.text(questions[currentQ].options[i]);
-            multipleChoices.attr({"data-index": i });
-            multipleChoices.addClass("thisChoice");
-            //Displays the multiple choices
-            $(".answerOption").append(multipleChoices);
-        }
-        countdown();
-        //after making a selection to the answer, the answer page appears
-        $(".thisChoice").on("click",function(){
-            userSelect = $(this).data("index");
-            clearInterval(time);
-        });
-
-    }
-
-
-
     // timer appears with 20 second countdown
     function countdown () {
         timer = 20;
         $("#timeLeft").html("<h3>Time Remaining: " + timer + "</h3>");
-        answer = true;
-
+        if (timer === 0){
+            unanswered++;
+            $("#message").html("Dang, time ran out!")
+            $("#timeLeft").empty();
+        }
         //timer countdown
         time = setInterval(showCountdown, 1000);
     }
@@ -141,13 +116,115 @@ $(document).ready(function() {
         $("#timeLeft").html("<h3> Time Remaining: " + timer + "</h3>");
         if (timer < 1){
             clearInterval(time);
-            answer = false;
+
             answerPrompt();
         }
     }
 
+    function loadQuestion (){
+        $("#message").empty();
+        $("#correctAnswer").empty();
+        $("#media").empty();
+        currentCorrectAnswer = questions[currentQ].answerIndex;
+
+        // # out of # questions remaining on html display
+        $("#currentQ").html("Question " + (currentQ+1) + ' of ' + questions.length);
+        // question displays on html, answers appear
+        $(".question").html("<h2> " + questions[currentQ].question + "</h2>");
+        // for loop to show the multiple choice answers
+        for(var i = 0; i < 4; i++){
+            var multipleChoices = $("<div>");
+            multipleChoices.text(questions[currentQ].options[i]);
+            multipleChoices.attr({"data-index": i });
+            multipleChoices.addClass("thisChoice");
+            //Displays the multiple choices
+            $(".answerOption").append(multipleChoices);
+
+        }
+
+        countdown();
+        //after making a selection to the answer, the answer page appears
+        $(".thisChoice").on("click",function(){
+            userGuess = $(this).data("index");
+            console.log(currentCorrectAnswer);
+            console.log(userGuess);
+            if(currentCorrectAnswer === userGuess){
+                rightAnswers++;
+                answerPrompt(true);
+            } else {
+                wrongAnswers++;
+                answerPrompt(false);
+            }
+
+            clearInterval(time);
+            answerPrompt();
+        });
+
+    }
+
+    function answerPrompt(correct){
+        clearInterval(time);
+        $("#timeLeft").empty();
+        // clear the question remaining string
+        $("#currentQ").empty();
+        // clear questions
+        $(".question").empty();
+        // clear multiple choices
+        $(".thisChoice").empty();
+        console.log(correct);
+        if (correct === true){
+            //Display "You are correct" message
+            $("#message").html("You right!");
+            //gif or photo
+        }
+
+        function answerPrompt(incorrect){
+            clearInterval(time);
+            $("#timeLeft").empty();
+            // clear the question remaining string
+            $("#currentQ").empty();
+            // clear questions
+            $(".question").empty();
+            // clear multiple choices
+            $(".thisChoice").empty();
+            console.log(incorrect);
+            if (incorrect === true){
+                //Display "You are correct" message
+                $("#message").html("You wrong Home-slice!");
+                //gif or photo
+            }
 
 
+
+
+        // else {
+        //     $("#message").html("You wrong Home-slice!");
+        // }
+
+
+        // show correct answer && gif, photo, sound
+
+        // on click of answer, questions disappears
+
+        // Check if the answer is correct or incorrect
+
+        // if correct, display for 3 seconds congratulating message / show gif, photo, sound
+
+        //correct ++;
+
+        // if incorrect, display for 3 seconds that answer was incorrect.
+
+        //incorrect ++;
+
+
+        // if unanswered, display for 3 seconds that answer was incorrect.
+
+        // incorrect ++;
+
+        // loop remaining questions
+
+
+    }
 
 
 
@@ -169,12 +246,8 @@ $(document).ready(function() {
             $('#unanswered').html("Unanswered: " + unanswered);
             $('#resetButton').addClass('reset');
             $('#resetButton').show();
-            $('#resetButton').html('Start Over?');
+            $('#resetButton').html("You want to play again?");
         }
-
-
-
-
 
     });
 
@@ -185,28 +258,9 @@ $(document).ready(function() {
 
 
 
-    // # out of # questions remaining on html display
 
-    // question displays on html, answers appear
 
-    // on click of answer, questions disappears
 
-    // Check if the answer is correct or incorrect
 
-    // if correct, display for 3 seconds congratulating message / show gif, photo, sound
-
-    //correct ++;
-
-    // if incorrect, display for 3 seconds that answer was incorrect.
-
-    //incorrect ++;
-
-    // show correct answer && gif, photo, sound
-
-    // if unanswered, display for 3 seconds that answer was incorrect.
-
-    // incorrect ++;
-
-    // loop remaining questions
 
 
