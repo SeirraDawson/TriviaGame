@@ -81,11 +81,7 @@ $(document).ready(function() {
         newGame();
     });
 
-    $("#resetButton").on("click", function(){
-        $(this).hide();
-        console.log(this + " is resetButton");
-        newGame();
-    });
+
 
 
     // ----------- Game Functions ------------
@@ -175,19 +171,20 @@ $(document).ready(function() {
             $("#message").html("<p>You wrong Home-slice! The correct answer is: " + currentCorrectAnswer + "</p>");
             // gif or photo
 
-            // wait 3 secs
-            // setTimeout(nextQ, 2000);
-            // call other function to nextQ
+
         }
     }
 
-    function nextQ() {
-        countdown();
-        $("#message").empty();
-        $("#correctAnswer").empty();
-        $("#media").empty();
-        loadQuestion();
-    }
+        // wait 3 secs
+        // setTimeout(nextQ, 2000);
+        // call other function to nextQ
+        // function nextQ() {
+        //     countdown();
+        //     $("#message").empty();
+        //     $("#correctAnswer").empty();
+        //     $("#media").empty();
+
+        // }
 
         //final page -- scoreboard
             // correctAnswer: #
@@ -208,5 +205,14 @@ $(document).ready(function() {
             $('#resetButton').addClass('reset');
             $('#resetButton').show();
             $('#resetButton').html("You want to play again?");
+
+        }
+
+        function reset (){
+            $("#resetButton").on("click", function(){
+                $(this).hide();
+                console.log(this + " is resetButton");
+                newGame();
+            });
         }
     });
