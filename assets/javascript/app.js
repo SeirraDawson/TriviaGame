@@ -169,6 +169,7 @@ $(document).ready(function() {
         else {
             //Display incorrect message
             $("#message").html("<p>You wrong Home-slice! The correct answer is: " + currentCorrectAnswer + "</p>");
+            // Unclear how to pull the answer from the questions array
             // gif or photo
 
 
