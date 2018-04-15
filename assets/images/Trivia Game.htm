@@ -8,7 +8,7 @@
     <!-- Google Fonts -->
     <link href="./Trivia Game_files/css" rel="stylesheet">
     <!-- Reset CSS -->
-    <!-- <link rel="stylesheet" type="text/css" href="./assets/css/reset.css"/> -->
+    <link rel="stylesheet" type="text/css" href="./Trivia Game_files/reset.css">
     <!-- Link to CSS -->
     <link rel="stylesheet" type="text/css" href="./Trivia Game_files/style.css">
     <!-- viewport -->
@@ -17,42 +17,38 @@
 </head>
 
 <body>
-    <header>
-        <div class="jumbtron">
-            <div class="container">
-                <img src="./Trivia Game_files/martin.jpg" alt="Martin cast photo" style="
-    width: 1500px;
-    height: 400px;
-">
-            </div>
-        </div>
-    </header>
+    <!-- <header>
+        <img src='./assets/images/martin.jpg' alt='Martin cast photo'>
+    </header> -->
+
 
     <div class="container">
-        <button class="btn btn-primary" id="startBtn">Wassssup! Let's Play</button>
 
-        <!-- Question page -->
+
+        <button class="btn btn-primary" id="startButton" style="display: none;">Wassssup! Let's Play</button>
+
+        <!-- Question Screen-->
         <div id="timeLeft"></div>
-        <div id="currentQuestion"></div>
-        <div class="question"></div>
-        <div class="answerList"></div>
+        <div id="currentQ">Question 1 of 10</div>
+        <div class="question"><h2> What is Tommy's job?</h2></div>
+        <div class="answerOption"><div data-index="0" class="thisChoice">Unemployed</div><div data-index="1" class="thisChoice">Firefighter</div><div data-index="2" class="thisChoice">Pimp</div><div data-index="3" class="thisChoice">Community Center Counselor</div></div>
 
-        <!-- Answer Page -->
-        <div id="message"></div>
+        <!-- Answer Prompt-->
+        <div id="message">Dang, time ran out!</div>
         <div id="correctedAnswer"></div>
-        <div id="gif-photo"></div>
+        <div id="image"></div>
 
         <!-- Scoreboard -->
         <div id="finalMessage"></div>
         <div id="rightAnswers"></div>
         <div id="wrongAnswers"></div>
         <div id="unanswered"></div>
-        <div id="resetBtn"></div>
+        <div id="resetButton"></div>
 
 
-        <footer class="footer">
-            <p>Copyright © 2018 Seirra Dawson</p>
-        </footer>
+        <!-- <footer class="footer">
+            <p>Copyright &copy; 2018 Seirra Dawson</p>
+        </footer> -->
 
         <!-- Linking jQuery-->
         <script type="text/javascript" src="./Trivia Game_files/jquery.min.js"></script>

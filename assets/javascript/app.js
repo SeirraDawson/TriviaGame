@@ -17,8 +17,8 @@ var questions = [{
 },{
 
         question: "Which rapper did not appear on “Martin”?",
-        options: ["The Notorious B.I.G", "MC Hammer", "Tupac", "Method Man"],
-        answerIndex: 3,
+        options: ["The Notorious B.I.G", "MC Hammer","Tupac", "Method Man"],
+        answerIndex: 2,
         image
         // A number of hip-hop artists from the '90s. However, Tupac was not one of them.
 },{
@@ -49,16 +49,18 @@ var questions = [{
         image
 },{
         question: "Martin and Gina are rich. They have won the lottery or so they think. Martin gives gifts to all his friends. What does he give Pam?",
-        options: ["A $2000 back shaving job", "A $2000 pedicure", "A $2000 plastic surgery job", "A $2000 wax job"],
+        options: ["$2000 back shaving job", "$2000 pedicure", "$2000 plastic surgery job", "$2000 wax job"],
         answerIndex: 3,
         image
 },{
         question: "Martin went on a rent strike because his rent was increased and the landlord refused to fix any of the appliances around the apartment. How much was the increase?",
         options: ["10%", "5%", "$5.00", "$50.00"],
-        answerIndex: 2,
+        answerIndex: 3,
         image
 }];
 
+
+//global variables
 var time = 0;
 var timer = 20;
 var currentQ = 0;
@@ -67,6 +69,8 @@ var wrongAnswers;
 var unanswered;
 var userGuess;
 var currentCorrectAnswer;
+
+
 
 
 $(document).ready(function() {
@@ -98,15 +102,9 @@ $(document).ready(function() {
         loadQuestion();
     }
 
-    // timer appears with 20 second countdown
+    // timer appears with second countdown
     function countdown () {
-        timer = 20;
-        $("#timeLeft").html("<h3>Time Remaining: " + timer + "</h3>");
-        if (timer === 0){
-            unanswered++;
-            $("#message").html("Dang, time ran out!")
-            $("#timeLeft").empty();
-        }
+        timer = 15;
         //timer countdown
         time = setInterval(showCountdown, 1000);
     }
@@ -115,20 +113,20 @@ $(document).ready(function() {
         timer --;
         $("#timeLeft").html("<h3> Time Remaining: " + timer + "</h3>");
         if (timer < 1){
-            clearInterval(time);
-
-            answerPrompt();
+            unanswered++;
+            $("#message").html("<p> Dang, time ran out! The correct answer is: "+ currentCorrectAnswer + "</p>")
+            $("#timeLeft").empty();
+            $(".question").empty();
+            $(".answerOption").empty();
         }
+
     }
 
-    function loadQuestion (){
-        $("#message").empty();
-        $("#correctAnswer").empty();
-        $("#media").empty();
+    function loadQuestion () {
+        countdown();
         currentCorrectAnswer = questions[currentQ].answerIndex;
-
-        // # out of # questions remaining on html display
-        $("#currentQ").html("Question " + (currentQ+1) + ' of ' + questions.length);
+        // // # out of # questions remaining on html display
+        // $("#currentQ").html("Question " + (currentQ+1) + ' of ' + questions.length);
         // question displays on html, answers appear
         $(".question").html("<h2> " + questions[currentQ].question + "</h2>");
         // for loop to show the multiple choice answers
@@ -139,94 +137,57 @@ $(document).ready(function() {
             multipleChoices.addClass("thisChoice");
             //Displays the multiple choices
             $(".answerOption").append(multipleChoices);
+    }
 
-        }
-
-        countdown();
         //after making a selection to the answer, the answer page appears
         $(".thisChoice").on("click",function(){
             userGuess = $(this).data("index");
-            console.log(currentCorrectAnswer);
-            console.log(userGuess);
-            if(currentCorrectAnswer === userGuess){
+            console.log('currentCorrectAnswer: ', currentCorrectAnswer);
+            console.log('userGuess: ', userGuess);
+            if(currentCorrectAnswer === userGuess) {
                 rightAnswers++;
                 answerPrompt(true);
-            } else {
+            }
+            else {
                 wrongAnswers++;
                 answerPrompt(false);
             }
-
-            clearInterval(time);
-            answerPrompt();
         });
-
     }
 
-    function answerPrompt(correct){
+    function answerPrompt(isCorrect){
         clearInterval(time);
         $("#timeLeft").empty();
         // clear the question remaining string
-        $("#currentQ").empty();
+        // $("#currentQ").empty();
         // clear questions
         $(".question").empty();
         // clear multiple choices
         $(".thisChoice").empty();
-        console.log(correct);
-        if (correct === true){
+        console.log('isCorrect: ', isCorrect);
+        if (isCorrect === true) {
             //Display "You are correct" message
             $("#message").html("You right!");
             //gif or photo
         }
+        else {
+            //Display incorrect message
+            $("#message").html("<p>You wrong Home-slice! The correct answer is: " + currentCorrectAnswer + "</p>");
+            // gif or photo
 
-        function answerPrompt(incorrect){
-            clearInterval(time);
-            $("#timeLeft").empty();
-            // clear the question remaining string
-            $("#currentQ").empty();
-            // clear questions
-            $(".question").empty();
-            // clear multiple choices
-            $(".thisChoice").empty();
-            console.log(incorrect);
-            if (incorrect === true){
-                //Display "You are correct" message
-                $("#message").html("You wrong Home-slice!");
-                //gif or photo
-            }
-
-
-
-
-        // else {
-        //     $("#message").html("You wrong Home-slice!");
-        // }
-
-
-        // show correct answer && gif, photo, sound
-
-        // on click of answer, questions disappears
-
-        // Check if the answer is correct or incorrect
-
-        // if correct, display for 3 seconds congratulating message / show gif, photo, sound
-
-        //correct ++;
-
-        // if incorrect, display for 3 seconds that answer was incorrect.
-
-        //incorrect ++;
-
-
-        // if unanswered, display for 3 seconds that answer was incorrect.
-
-        // incorrect ++;
-
-        // loop remaining questions
-
-
+            // wait 3 secs
+            // setTimeout(nextQ, 2000);
+            // call other function to nextQ
+        }
     }
 
-
+    function nextQ() {
+        countdown();
+        $("#message").empty();
+        $("#correctAnswer").empty();
+        $("#media").empty();
+        loadQuestion();
+    }
 
         //final page -- scoreboard
             // correctAnswer: #
@@ -248,19 +209,4 @@ $(document).ready(function() {
             $('#resetButton').show();
             $('#resetButton').html("You want to play again?");
         }
-
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
